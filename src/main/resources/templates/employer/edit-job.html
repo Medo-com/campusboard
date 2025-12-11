@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ============================================
+     EMPLOYER EDIT JOB PAGE (FIXED VERSION)
+     ============================================ -->
+
+<head th:replace="fragments/header :: head"></head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav th:replace="fragments/header :: header"></nav>
+
+<div class="container">
+
+    <!-- ============================================
+         PAGE HEADER
+         ============================================ -->
+    <div class="card">
+        <div class="card-header d-flex justify-between align-center">
+            <h2>
+                <i class="fas fa-edit"></i>
+                Edit Job Posting
+            </h2>
+
+            <!-- FIXED STATUS BADGES -->
+            <!-- APPROVED -->
+            <span class="badge badge-approved"
+                  th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).APPROVED}"
+                  th:text="${job.status}">
+            </span>
+
+            <!-- PENDING -->
+            <span class="badge badge-pending"
+                  th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).PENDING}"
+                  th:text="${job.status}">
+            </span>
+
+            <!-- REJECTED -->
+            <span class="badge badge-rejected"
+                  th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).REJECTED}"
+                  th:text="${job.status}">
+            </span>
+
+        </div>
+
+        <p>
+            Update your job posting details below.
+            Changes may require admin re-approval before being visible to students.
+        </p>
+    </div>
+
+    <!-- ============================================
+         EDIT JOB FORM
+         ============================================ -->
+    <div class="card">
+
+        <form th:action="@{/employer/jobs/edit/{id}(id=${job.jobId})}"
+              th:object="${job}"
+              method="post">
+
+            <!-- TITLE -->
+            <div class="form-group">
+                <label for="title">Job Title <span style="color: red;">*</span></label>
+                <input type="text"
+                       id="title"
+                       th:field="*{title}"
+                       class="form-control"
+                       th:classappend="${#fields.hasErrors('title')} ? 'field-error' : ''"
+                       placeholder="Library Assistant, Research Assistant"
+                       required>
+
+                <div class="error-message" th:if="${#fields.hasErrors('title')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:errors="*{title}"></span>
+                </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="form-group">
+                <label for="description">Job Description <span style="color: red;">*</span></label>
+                <textarea id="description"
+                          th:field="*{description}"
+                          class="form-control"
+                          th:classappend="${#fields.hasErrors('description')} ? 'field-error' : ''"
+                          rows="8"
+                          placeholder="Provide full job details..."
+                          required></textarea>
+
+                <div class="error-message" th:if="${#fields.hasErrors('description')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:errors="*{description}"></span>
+                </div>
+
+                <small style="color: #666;">
+                    <i class="fas fa-info-circle"></i>
+                    Include responsibilities and qualifications.
+                </small>
+            </div>
+
+            <!-- LOCATION -->
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text"
+                       id="location"
+                       th:field="*{location}"
+                       class="form-control"
+                       placeholder="Main Library, Science Building">
+            </div>
+
+            <!-- SALARY + CATEGORY -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+
+                <!-- SALARY -->
+                <div class="form-group">
+                    <label for="salary">Hourly Wage ($)</label>
+                    <input type="number"
+                           id="salary"
+                           th:field="*{salary}"
+                           class="form-control"
+                           step="0.01"
+                           min="0"
+                           placeholder="15.50">
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="form-group">
+                    <label for="category">Job Category</label>
+                    <select id="category" th:field="*{category}" class="form-control">
+                        <option value="">-- Select Category --</option>
+                        <option value="Administrative">Administrative</option>
+                        <option value="Research">Research</option>
+                        <option value="Technical">Technical</option>
+                        <option value="Library">Library</option>
+                        <option value="Food Service">Food Service</option>
+                        <option value="Tutoring">Tutoring</option>
+                        <option value="Event Support">Event Support</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- DEADLINE -->
+            <div class="form-group">
+                <label for="deadline">Application Deadline</label>
+                <input type="date"
+                       id="deadline"
+                       th:field="*{deadline}"
+                       class="form-control">
+            </div>
+
+            <!-- INFO ALERTS -->
+            <div class="alert alert-warning"
+                 th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).APPROVED}">
+                <i class="fas fa-exclamation-triangle"></i>
+                Editing this job may return it to PENDING status.
+            </div>
+
+            <div class="alert alert-info"
+                 th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).REJECTED}">
+                <i class="fas fa-info-circle"></i>
+                Improve your posting and resubmit for approval.
+            </div>
+
+            <!-- FORM BUTTONS -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a th:href="@{/employer/jobs}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+
+        </form>
+
+        <!-- POSTING TIMESTAMPS -->
+        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #ddd; color: #999; font-size: 0.9rem;">
+            <p>
+                <i class="fas fa-clock"></i>
+                Originally posted:
+                <span th:text="${#temporals.format(job.createdAt, 'MMM dd, yyyy HH:mm')}">Date</span>
+            </p>
+            <p th:if="${job.updatedAt != null}">
+                <i class="fas fa-edit"></i>
+                Last modified:
+                <span th:text="${#temporals.format(job.updatedAt, 'MMM dd, yyyy HH:mm')}">Date</span>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

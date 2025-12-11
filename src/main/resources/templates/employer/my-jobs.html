@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head"></head>
+
+<body>
+
+<nav th:replace="fragments/header :: header"></nav>
+
+<div class="container">
+
+    <!-- SUCCESS MESSAGES -->
+    <div class="alert alert-success" th:if="${param.created}">
+        <i class="fas fa-check-circle"></i>
+        Job posting created successfully! It's pending admin approval.
+    </div>
+
+    <div class="alert alert-success" th:if="${param.updated}">
+        <i class="fas fa-check-circle"></i>
+        Job posting updated successfully!
+    </div>
+
+    <div class="alert alert-success" th:if="${param.deleted}">
+        <i class="fas fa-check-circle"></i>
+        Job posting deleted successfully!
+    </div>
+
+    <!-- PAGE HEADER -->
+    <div class="card">
+        <div class="card-header d-flex justify-between align-center">
+            <h2>
+                <i class="fas fa-briefcase"></i>
+                My Job Postings
+            </h2>
+            <a th:href="@{/employer/jobs/create}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Post New Job
+            </a>
+        </div>
+        <p>Manage all your job postings. You can edit, delete, or view applicants for each position.</p>
+    </div>
+
+    <!-- JOB LIST -->
+    <div th:if="${jobs != null and !jobs.empty}">
+
+        <div class="job-card" th:each="job : ${jobs}">
+
+            <!-- HEADER WITH STATUS -->
+            <div class="d-flex justify-between align-center mb-2">
+                <h3 th:text="${job.title}">Job Title</h3>
+
+                <!-- APPROVED -->
+                <span class="badge badge-approved"
+                      th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).APPROVED}"
+                      th:text="${job.status}">
+                </span>
+
+                <!-- PENDING -->
+                <span class="badge badge-pending"
+                      th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).PENDING}"
+                      th:text="${job.status}">
+                </span>
+
+                <!-- REJECTED -->
+                <span class="badge badge-rejected"
+                      th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).REJECTED}"
+                      th:text="${job.status}">
+                </span>
+            </div>
+
+            <!-- META INFO -->
+            <div class="job-meta">
+
+                <div class="job-meta-item" th:if="${job.location != null}">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span th:text="${job.location}"></span>
+                </div>
+
+                <div class="job-meta-item" th:if="${job.salary != null}">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span th:text="${#numbers.formatDecimal(job.salary, 0, 2)}"></span>/hour
+                </div>
+
+                <div class="job-meta-item" th:if="${job.category != null}">
+                    <i class="fas fa-tag"></i>
+                    <span th:text="${job.category}"></span>
+                </div>
+
+                <div class="job-meta-item" th:if="${job.deadline != null}">
+                    <i class="fas fa-calendar-alt"></i>
+                    Deadline: <span th:text="${job.deadline}"></span>
+                </div>
+            </div>
+
+            <!-- DESCRIPTION PREVIEW -->
+            <div class="job-description">
+                <p>
+                    <span th:text="${#strings.length(job.description) > 150
+                                    ? #strings.substring(job.description, 0, 150) + '...'
+                                    : job.description}">
+                    </span>
+                </p>
+            </div>
+
+            <!-- TIMESTAMP -->
+            <div style="color: #999; font-size: 0.85rem; margin: 1rem 0;">
+                <i class="fas fa-clock"></i>
+                Posted:
+                <span th:text="${#temporals.format(job.createdAt, 'MMM dd, yyyy')}"></span>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="d-flex gap-2" style="flex-wrap: wrap;">
+
+                <!-- VIEW APPLICANTS (ONLY IF APPROVED) -->
+                <a th:href="@{/employer/jobs/{id}/applicants(id=${job.jobId})}"
+                   class="btn btn-primary btn-sm"
+                   th:if="${job.status == T(com.campusboard.campusboard.models.Job.Status).APPROVED}">
+                    <i class="fas fa-users"></i> View Applicants
+                </a>
+
+                <!-- EDIT -->
+                <a th:href="@{/employer/jobs/edit/{id}(id=${job.jobId})}"
+                   class="btn btn-warning btn-sm">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+
+                <!-- DELETE -->
+                <form th:action="@{/employer/jobs/delete/{id}(id=${job.jobId})}"
+                      method="post"
+                      style="display: inline;"
+                      onsubmit="return confirm('Are you sure you want to delete this job posting?');">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state" th:if="${jobs == null or jobs.empty}">
+        <i class="fas fa-inbox"></i>
+        <h3>No Job Postings Yet</h3>
+        <p>You haven't created any job postings yet. Start by posting your first job opportunity!</p>
+        <a th:href="@{/employer/jobs/create}" class="btn btn-primary" style="margin-top: 1rem;">
+            <i class="fas fa-plus"></i> Create Your First Job Posting
+        </a>
+    </div>
+
+    <!-- STATUS LEGEND -->
+    <div class="card mt-3" th:if="${jobs != null and !jobs.empty}">
+        <h4><i class="fas fa-info-circle"></i> Status Guide</h4>
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div>
+                <span class="badge badge-pending">PENDING</span>
+                <span> - Awaiting admin approval</span>
+            </div>
+            <div>
+                <span class="badge badge-approved">APPROVED</span>
+                <span> - Live and visible to students</span>
+            </div>
+            <div>
+                <span class="badge badge-rejected">REJECTED</span>
+                <span> - Not approved, can be edited</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

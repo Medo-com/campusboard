@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- HEAD FRAGMENT -->
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${pageTitle != null ? pageTitle + ' - Campus Job Board' : 'Campus Job Board'}">
+        Campus Job Board
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<!-- NAVIGATION BAR FRAGMENT -->
+<nav class="navbar" th:fragment="header">
+    <div class="nav-container">
+
+        <a href="/" class="nav-brand">
+            <i class="fas fa-briefcase"></i> Campus Job Board
+        </a>
+
+        <ul class="nav-links">
+
+            <!-- Student Links -->
+            <li sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/dashboard}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/jobs}">
+                    <i class="fas fa-search"></i> Browse Jobs
+                </a>
+            </li>
+            <li sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/applications}">
+                    <i class="fas fa-file-alt"></i> My Applications
+                </a>
+            </li>
+
+            <!-- Employer Links -->
+            <li sec:authorize="hasRole('EMPLOYER')">
+                <a th:href="@{/employer/dashboard}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li sec:authorize="hasRole('EMPLOYER')">
+                <a th:href="@{/employer/jobs}">
+                    <i class="fas fa-briefcase"></i> My Jobs
+                </a>
+            </li>
+            <li sec:authorize="hasRole('EMPLOYER')">
+                <a th:href="@{/employer/jobs/create}">
+                    <i class="fas fa-plus"></i> Post Job
+                </a>
+            </li>
+
+            <!-- Admin Links -->
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/jobs/pending}">
+                    <i class="fas fa-clock"></i> Pending Jobs
+                </a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i> Manage Users
+                </a>
+            </li>
+
+            <!-- Logout Button -->
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-secondary btn-sm"
+                            style="border: none; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+
+</html>

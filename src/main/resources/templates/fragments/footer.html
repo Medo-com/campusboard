@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- FOOTER FRAGMENT -->
+<footer class="footer" th:fragment="footer">
+
+    <div class="footer-content">
+
+        <p>
+            <i class="fas fa-copyright"></i>
+            <span th:text="${#dates.year(#dates.createNow())}">2025</span>
+            Campus Job Board System. All rights reserved.
+        </p>
+
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Connecting Students with Campus Opportunities
+        </p>
+
+    </div>
+
+</footer>
+
+</html>
