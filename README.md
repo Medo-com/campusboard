@@ -2,6 +2,12 @@
 
 A full-stack Spring Boot + Thymeleaf web application designed to connect students, employers, and administrators within a campus environment. Students browse and apply for jobs, employers post opportunities, and administrators moderate the platform.
 
+## Creators
+Created by:
+Ahmed
+Kory
+Mason
+
 ---
 
 ## Features
