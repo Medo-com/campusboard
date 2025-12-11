@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ============================================
+     STUDENT JOB DETAILS PAGE
+     ============================================
+     This page shows complete information about a single job
+     and allows the student to apply to it.
+
+     Features:
+     - Displays full job description and all details
+     - Shows employer information
+     - Provides "Apply" button
+     - Shows error messages if application fails
+     - Displays success/error messages from URL parameters
+
+     The controller passes a "job" object to this template
+     ============================================ -->
+
+<head th:replace="fragments/header :: head">
+    <!-- Import head section with CSS and meta tags -->
+</head>
+
+<body>
+<!-- ============================================
+     NAVIGATION BAR
+     ============================================ -->
+<nav th:replace="fragments/header :: header"></nav>
+
+<!-- ============================================
+     MAIN CONTENT CONTAINER
+     ============================================ -->
+<div class="container">
+
+    <!-- ============================================
+         SUCCESS MESSAGE
+         ============================================
+         Shown when redirected with ?success parameter
+         Example: /student/jobs/1?success -->
+    <div class="alert alert-success" th:if="${param.success}">
+        <i class="fas fa-check-circle"></i>
+        Application submitted successfully!
+        Check "My Applications" to track its status.
+    </div>
+
+    <!-- ============================================
+         ERROR MESSAGE
+         ============================================
+         Shown when redirected with ?error parameter
+         Example: /student/jobs/1?error=Already+applied -->
+    <div class="alert alert-danger" th:if="${param.error}">
+        <i class="fas fa-exclamation-circle"></i>
+        <!-- Display the error message from URL parameter -->
+        <span th:text="${param.error}">Error message</span>
+    </div>
+
+    <!-- ============================================
+         JOB DETAILS CARD
+         ============================================ -->
+    <div class="card">
+
+        <!-- =====================
+             CARD HEADER WITH JOB TITLE
+             ===================== -->
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-briefcase"></i>
+                <span th:text="${job.title}">Job Title</span>
+            </h2>
+        </div>
+
+        <!-- =====================
+             EMPLOYER INFORMATION
+             ===================== -->
+        <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.5rem;">
+                <i class="fas fa-building"></i> Employer Information
+            </h4>
+            <p style="margin: 0;">
+                <strong>Posted by:</strong>
+                <span th:text="${job.employer.fullName}">Employer Name</span>
+            </p>
+            <p style="margin: 0;">
+                <strong>Contact:</strong>
+                <span th:text="${job.employer.email}">employer@example.com</span>
+            </p>
+        </div>
+
+        <!-- =====================
+             JOB METADATA GRID
+             =====================
+             Displays key information in a grid layout -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+
+            <!-- LOCATION -->
+            <div th:if="${job.location != null}">
+                <h4 style="color: #667eea; margin-bottom: 0.5rem;">
+                    <i class="fas fa-map-marker-alt"></i> Location
+                </h4>
+                <p th:text="${job.location}">Location</p>
+            </div>
+
+            <!-- SALARY -->
+            <div th:if="${job.salary != null}">
+                <h4 style="color: #667eea; margin-bottom: 0.5rem;">
+                    <i class="fas fa-dollar-sign"></i> Salary
+                </h4>
+                <p>
+                    $<span th:text="${#numbers.formatDecimal(job.salary, 0, 2)}">0.00</span> per hour
+                </p>
+            </div>
+
+            <!-- CATEGORY -->
+            <div th:if="${job.category != null}">
+                <h4 style="color: #667eea; margin-bottom: 0.5rem;">
+                    <i class="fas fa-tag"></i> Category
+                </h4>
+                <p th:text="${job.category}">Category</p>
+            </div>
+
+            <!-- APPLICATION DEADLINE -->
+            <div th:if="${job.deadline != null}">
+                <h4 style="color: #667eea; margin-bottom: 0.5rem;">
+                    <i class="fas fa-calendar-alt"></i> Application Deadline
+                </h4>
+                <p th:text="${job.deadline}">Deadline</p>
+            </div>
+        </div>
+
+        <!-- =====================
+             JOB DESCRIPTION
+             =====================
+             Full description of the job position -->
+        <div style="margin-bottom: 2rem;">
+            <h3 style="color: #667eea; margin-bottom: 1rem;">
+                <i class="fas fa-align-left"></i> Job Description
+            </h3>
+
+            <!-- Display full description with preserved line breaks -->
+            <div style="line-height: 1.8; color: #555; white-space: pre-line;">
+                <p th:text="${job.description}">
+                    Full job description will appear here with all details
+                    about responsibilities, requirements, and expectations.
+                </p>
+            </div>
+        </div>
+
+        <!-- =====================
+             JOB STATUS BADGE
+             =====================
+             Shows current status of the job posting -->
+        <div style="margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 0.5rem;">Status:</h4>
+            <span class="badge badge-approved"
+                  th:classappend="${job.status == T(com.campusboard.campusboard.models.Job.Status).APPROVED} ? 'badge-approved' :
+                                     ${job.status == T(com.campusboard.campusboard.models.Job.Status).PENDING} ? 'badge-pending' :
+                                     'badge-rejected'"
+                  th:text="${job.status}">
+                    APPROVED
+                </span>
+        </div>
+
+        <!-- =====================
+             APPLICATION FORM
+             =====================
+             Form to submit application
+             POST request to /student/apply/{jobId} -->
+        <form th:action="@{/student/apply/{id}(id=${job.jobId})}"
+              method="post"
+              style="margin-top: 2rem;">
+
+            <!-- Information message -->
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Note:</strong> You can only apply to each job once.
+                Make sure you meet the requirements before applying.
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                <i class="fas fa-paper-plane"></i>
+                Apply to This Position
+            </button>
+
+            <!-- Back to jobs list link -->
+            <a th:href="@{/student/jobs}" class="btn btn-secondary" style="margin-left: 1rem;">
+                <i class="fas fa-arrow-left"></i>
+                Back to Job List
+            </a>
+        </form>
+
+        <!-- =====================
+             POSTING TIMESTAMPS
+             =====================
+             Shows when job was posted and last updated -->
+        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #ddd; color: #999; font-size: 0.9rem;">
+            <p>
+                <i class="fas fa-clock"></i>
+                Posted on:
+                <span th:text="${#temporals.format(job.createdAt, 'MMM dd, yyyy HH:mm')}">
+                        Date
+                    </span>
+            </p>
+            <p th:if="${job.updatedAt != null and job.updatedAt != job.createdAt}">
+                <i class="fas fa-edit"></i>
+                Last updated:
+                <span th:text="${#temporals.format(job.updatedAt, 'MMM dd, yyyy HH:mm')}">
+                        Date
+                    </span>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- ============================================
+     STUDENT DASHBOARD PAGE
+     ============================================
+     This is the main landing page for students after login.
+     It provides quick access to all student features:
+     - Browse available jobs
+     - View application history
+     - Quick stats overview
+
+     The dashboard uses a card-based grid layout for
+     easy navigation to different sections.
+     ============================================ -->
+
+<head th:replace="fragments/header :: head">
+    <!-- This line imports the <head> section from header fragment
+         which includes CSS, meta tags, and title -->
+</head>
+
+<body>
+<!-- ============================================
+     NAVIGATION BAR
+     ============================================
+     Import the navigation bar from header fragment -->
+<nav th:replace="fragments/header :: header"></nav>
+
+<!-- ============================================
+     MAIN CONTENT CONTAINER
+     ============================================ -->
+<div class="container">
+
+    <!-- ============================================
+         WELCOME HEADER
+         ============================================
+         Greets the logged-in student by name -->
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-user-graduate"></i>
+                Welcome, <span sec:authentication="principal.username">Student</span>!
+            </h2>
+        </div>
+        <p>
+            This is your student dashboard. From here, you can browse available
+            job opportunities, submit applications, and track your application status.
+        </p>
+    </div>
+
+    <!-- ============================================
+         DASHBOARD GRID
+         ============================================
+         Grid of cards showing different actions
+         available to the student -->
+    <div class="dashboard-grid">
+
+        <!-- =====================
+             BROWSE JOBS CARD
+             =====================
+             Takes student to job listing page -->
+        <div class="dashboard-card">
+            <!-- Icon representing job search -->
+            <i class="fas fa-search"></i>
+
+            <!-- Card title -->
+            <h3>Browse Jobs</h3>
+
+            <!-- Card description -->
+            <p>
+                Explore available job opportunities posted by employers
+                and approved by administrators.
+            </p>
+
+            <!-- Action button -->
+            <a th:href="@{/student/jobs}" class="btn btn-primary">
+                View All Jobs
+            </a>
+        </div>
+
+        <!-- =====================
+             MY APPLICATIONS CARD
+             =====================
+             Takes student to their application history -->
+        <div class="dashboard-card">
+            <!-- Icon representing applications -->
+            <i class="fas fa-file-alt"></i>
+
+            <!-- Card title -->
+            <h3>My Applications</h3>
+
+            <!-- Card description -->
+            <p>
+                Track the status of your job applications and see which
+                positions you've already applied to.
+            </p>
+
+            <!-- Action button -->
+            <a th:href="@{/student/applications}" class="btn btn-primary">
+                View Applications
+            </a>
+        </div>
+
+        <!-- =====================
+             HELP & SUPPORT CARD
+             =====================
+             Provides guidance to students -->
+        <div class="dashboard-card">
+            <!-- Icon representing help -->
+            <i class="fas fa-question-circle"></i>
+
+            <!-- Card title -->
+            <h3>Need Help?</h3>
+
+            <!-- Card description -->
+            <p>
+                Learn how to create effective applications and make the
+                most of the Campus Job Board system.
+            </p>
+
+            <!-- Info text instead of button -->
+            <p style="color: #667eea; font-weight: 600;">
+                <i class="fas fa-info-circle"></i>
+                Browse jobs and click "Apply" to submit applications
+            </p>
+        </div>
+    </div>
+
+    <!-- ============================================
+         QUICK TIPS SECTION
+         ============================================
+         Helpful information for students -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3><i class="fas fa-lightbulb"></i> Quick Tips</h3>
+        </div>
+        <ul style="line-height: 2; color: #555;">
+            <li>
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                <strong>Apply Early:</strong> Many positions fill up quickly,
+                so don't wait to submit your application.
+            </li>
+            <li>
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                <strong>Read Job Descriptions:</strong> Make sure you meet
+                the requirements before applying.
+            </li>
+            <li>
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                <strong>Check Application Status:</strong> Regularly check
+                your applications page for updates.
+            </li>
+            <li>
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                <strong>One Application Per Job:</strong> You can only
+                apply once to each position.
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================
+     Import the footer from footer fragment -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

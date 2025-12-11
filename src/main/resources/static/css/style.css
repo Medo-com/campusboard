@@ -1,0 +1,614 @@
+/* ============================================
+   CAMPUS JOB BOARD SYSTEM - MAIN STYLESHEET
+   ============================================
+   This file contains all the styling for the
+   Campus Job Board application. It provides
+   a clean, modern, and professional look.
+   ============================================ */
+
+/* ============================================
+   GLOBAL RESET & BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling - sets up the overall page layout */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================
+   HEADER STYLES
+   ============================================ */
+/* Main navigation bar at the top of every page */
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Container for navbar content */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Brand/Logo styling */
+.nav-brand {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* Navigation links container */
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+/* Individual navigation link styling */
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s;
+    font-weight: 500;
+}
+
+/* Hover effect for navigation links */
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+/* ============================================
+   MAIN CONTENT CONTAINER
+   ============================================ */
+/* Main content area - centers content and adds padding */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    flex: 1;
+}
+
+/* ============================================
+   CARD COMPONENTS
+   ============================================ */
+/* Card wrapper - used for content sections */
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Card header with title */
+.card-header {
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Card title styling */
+.card-header h2 {
+    color: #667eea;
+    font-size: 1.8rem;
+}
+
+/* ============================================
+   DASHBOARD STYLES
+   ============================================ */
+/* Grid layout for dashboard cards */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Individual dashboard card */
+.dashboard-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+/* Hover effect for dashboard cards */
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* Dashboard card icon */
+.dashboard-card i {
+    font-size: 3rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+/* Dashboard card title */
+.dashboard-card h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+/* Dashboard card description */
+.dashboard-card p {
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+/* Base button styling - used for all buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+/* Primary button - main actions */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Primary button hover effect */
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+/* Success button - for approve/confirm actions */
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+/* Danger button - for delete/reject actions */
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Warning button - for edit/update actions */
+.btn-warning {
+    background: #ffc107;
+    color: #333;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+    transform: translateY(-2px);
+}
+
+/* Secondary button - for less important actions */
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Small button variant */
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   FORM STYLES
+   ============================================ */
+/* Form group - wraps label and input */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Form labels */
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+/* All form inputs and textareas */
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+/* Focus state for inputs */
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Textarea specific styling */
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Select dropdown styling */
+select.form-control {
+    cursor: pointer;
+}
+
+/* ============================================
+   TABLE STYLES
+   ============================================ */
+/* Table wrapper for responsive scrolling */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+/* Base table styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+/* Table header styling */
+.table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Table header cells */
+.table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+/* Table body cells */
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Zebra striping for table rows */
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Hover effect for table rows */
+.table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* ============================================
+   BADGE/STATUS STYLES
+   ============================================ */
+/* Base badge styling for status indicators */
+.badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Pending status badge */
+.badge-pending {
+    background: #ffc107;
+    color: #333;
+}
+
+/* Approved status badge */
+.badge-approved {
+    background: #28a745;
+    color: white;
+}
+
+/* Rejected status badge */
+.badge-rejected {
+    background: #dc3545;
+    color: white;
+}
+
+/* Submitted status badge */
+.badge-submitted {
+    background: #17a2b8;
+    color: white;
+}
+
+/* Active status badge */
+.badge-active {
+    background: #28a745;
+    color: white;
+}
+
+/* Inactive status badge */
+.badge-inactive {
+    background: #6c757d;
+    color: white;
+}
+
+/* ============================================
+   ALERT/MESSAGE STYLES
+   ============================================ */
+/* Base alert styling for notifications */
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid;
+}
+
+/* Success alert */
+.alert-success {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+/* Error alert */
+.alert-danger {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+/* Info alert */
+.alert-info {
+    background: #d1ecf1;
+    border-color: #17a2b8;
+    color: #0c5460;
+}
+
+/* Warning alert */
+.alert-warning {
+    background: #fff3cd;
+    border-color: #ffc107;
+    color: #856404;
+}
+
+/* ============================================
+   JOB CARD STYLES
+   ============================================ */
+/* Individual job listing card */
+.job-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Hover effect for job cards */
+.job-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Job card title */
+.job-card h3 {
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+/* Job card metadata (location, salary, etc.) */
+.job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 1rem 0;
+    color: #666;
+}
+
+/* Individual metadata item */
+.job-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Job description preview */
+.job-description {
+    color: #555;
+    margin: 1rem 0;
+    line-height: 1.6;
+}
+
+/* ============================================
+   FOOTER STYLES
+   ============================================ */
+/* Footer at bottom of page */
+.footer {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: auto;
+}
+
+/* Footer text */
+.footer p {
+    margin: 0;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+/* Text alignment utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Margin utilities */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+/* Padding utilities */
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
+
+/* Display utilities */
+.d-flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+
+/* Width utilities */
+.w-100 {
+    width: 100%;
+}
+
+/* ============================================
+   ERROR STYLES
+   ============================================ */
+/* Error message display */
+.error-message {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* Field error styling */
+.field-error {
+    border-color: #dc3545 !important;
+}
+
+/* ============================================
+   LOADING/EMPTY STATE STYLES
+   ============================================ */
+/* Empty state message */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+/* Tablet and below */
+@media (max-width: 768px) {
+    /* Stack navigation vertically on mobile */
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    /* Reduce container padding on mobile */
+    .container {
+        padding: 0 1rem;
+    }
+
+    /* Stack dashboard grid on mobile */
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Make job metadata stack on mobile */
+    .job-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Make table scrollable on mobile */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    /* Reduce font sizes on small screens */
+    body {
+        font-size: 14px;
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}

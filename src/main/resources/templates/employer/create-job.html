@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ============================================
+     EMPLOYER CREATE JOB PAGE
+     ============================================
+     This page provides a form for employers to create
+     new job postings.
+
+     Features:
+     - Form with validation for all job fields
+     - Displays validation errors
+     - Required fields: title, description
+     - Optional fields: location, salary, category, deadline
+     - Form submits to /employer/jobs/create
+
+     The controller passes an empty "job" object to this template
+     for Thymeleaf's form binding (th:object)
+     ============================================ -->
+
+<head th:replace="fragments/header :: head">
+    <!-- Import head section with CSS and meta tags -->
+</head>
+
+<body>
+<!-- ============================================
+     NAVIGATION BAR
+     ============================================ -->
+<nav th:replace="fragments/header :: header"></nav>
+
+<!-- ============================================
+     MAIN CONTENT CONTAINER
+     ============================================ -->
+<div class="container">
+
+    <!-- ============================================
+         PAGE HEADER
+         ============================================ -->
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-plus-circle"></i>
+                Create New Job Posting
+            </h2>
+        </div>
+        <p>
+            Fill out the form below to create a new job posting.
+            Your posting will be reviewed by an administrator before being published.
+        </p>
+    </div>
+
+    <!-- ============================================
+         JOB CREATION FORM
+         ============================================
+         Uses Thymeleaf's form binding with th:object
+         Submits POST request to /employer/jobs/create -->
+    <div class="card">
+
+        <form th:action="@{/employer/jobs/create}"
+              th:object="${job}"
+              method="post">
+
+            <!-- =====================
+                 JOB TITLE FIELD
+                 =====================
+                 Required field with validation -->
+            <div class="form-group">
+                <label for="title">
+                    Job Title <span style="color: red;">*</span>
+                </label>
+                <input type="text"
+                       id="title"
+                       th:field="*{title}"
+                       class="form-control"
+                       th:classappend="${#fields.hasErrors('title')} ? 'field-error' : ''"
+                       placeholder="e.g., Library Assistant, Research Assistant, Campus Guide"
+                       required>
+
+                <!-- Display validation error if exists -->
+                <div class="error-message" th:if="${#fields.hasErrors('title')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:errors="*{title}">Title error</span>
+                </div>
+            </div>
+
+            <!-- =====================
+                 JOB DESCRIPTION FIELD
+                 =====================
+                 Required textarea for detailed description -->
+            <div class="form-group">
+                <label for="description">
+                    Job Description <span style="color: red;">*</span>
+                </label>
+                <textarea id="description"
+                          th:field="*{description}"
+                          class="form-control"
+                          th:classappend="${#fields.hasErrors('description')} ? 'field-error' : ''"
+                          rows="8"
+                          placeholder="Provide a detailed description of the job responsibilities, requirements, and qualifications..."
+                          required></textarea>
+
+                <!-- Display validation error if exists -->
+                <div class="error-message" th:if="${#fields.hasErrors('description')}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:errors="*{description}">Description error</span>
+                </div>
+
+                <!-- Help text -->
+                <small style="color: #666;">
+                    <i class="fas fa-info-circle"></i>
+                    Include key responsibilities, required skills, work hours, and any special requirements.
+                </small>
+            </div>
+
+            <!-- =====================
+                 LOCATION FIELD
+                 =====================
+                 Optional field -->
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text"
+                       id="location"
+                       th:field="*{location}"
+                       class="form-control"
+                       placeholder="e.g., Main Library, Science Building, Room 201">
+                <small style="color: #666;">
+                    <i class="fas fa-info-circle"></i>
+                    Specify where the job is located on campus.
+                </small>
+            </div>
+
+            <!-- =====================
+                 TWO-COLUMN LAYOUT
+                 =====================
+                 Salary and Category side by side -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+
+                <!-- SALARY FIELD -->
+                <div class="form-group">
+                    <label for="salary">Hourly Wage ($)</label>
+                    <input type="number"
+                           id="salary"
+                           th:field="*{salary}"
+                           class="form-control"
+                           step="0.01"
+                           min="0"
+                           placeholder="e.g., 15.50">
+                    <small style="color: #666;">
+                        <i class="fas fa-info-circle"></i>
+                        Enter the hourly rate in dollars.
+                    </small>
+                </div>
+
+                <!-- CATEGORY FIELD -->
+                <div class="form-group">
+                    <label for="category">Job Category</label>
+                    <select id="category"
+                            th:field="*{category}"
+                            class="form-control">
+                        <option value="">-- Select Category --</option>
+                        <option value="Administrative">Administrative</option>
+                        <option value="Research">Research</option>
+                        <option value="Technical">Technical</option>
+                        <option value="Library">Library</option>
+                        <option value="Food Service">Food Service</option>
+                        <option value="Tutoring">Tutoring</option>
+                        <option value="Event Support">Event Support</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <small style="color: #666;">
+                        <i class="fas fa-info-circle"></i>
+                        Choose the category that best fits this position.
+                    </small>
+                </div>
+            </div>
+
+            <!-- =====================
+                 APPLICATION DEADLINE FIELD
+                 =====================
+                 Date input for application deadline -->
+            <div class="form-group">
+                <label for="deadline">Application Deadline</label>
+                <input type="date"
+                       id="deadline"
+                       th:field="*{deadline}"
+                       class="form-control">
+                <small style="color: #666;">
+                    <i class="fas fa-info-circle"></i>
+                    Set a deadline for when applications will be accepted.
+                </small>
+            </div>
+
+            <!-- =====================
+                 INFORMATION ALERT
+                 =====================
+                 Important notice about approval process -->
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <strong>Note:</strong> Your job posting will be set to PENDING status
+                and must be approved by an administrator before students can see it.
+            </div>
+
+            <!-- =====================
+                 FORM BUTTONS
+                 =====================
+                 Submit and Cancel buttons -->
+            <div class="d-flex gap-2">
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Create Job Posting
+                </button>
+
+                <!-- Cancel button -->
+                <a th:href="@{/employer/jobs}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- ============================================
+         TIPS FOR CREATING EFFECTIVE POSTINGS
+         ============================================ -->
+    <div class="card">
+        <h3 style="color: #667eea; margin-bottom: 1rem;">
+            <i class="fas fa-lightbulb"></i> Tips for Creating Effective Job Postings
+        </h3>
+        <ul style="line-height: 2; color: #555;">
+            <li>
+                <strong>Be Specific:</strong> Clearly outline the responsibilities
+                and requirements for the position.
+            </li>
+            <li>
+                <strong>Set Realistic Expectations:</strong> Make sure the workload
+                and hours are appropriate for student employees.
+            </li>
+            <li>
+                <strong>Highlight Benefits:</strong> Mention any unique perks,
+                learning opportunities, or flexible scheduling.
+            </li>
+            <li>
+                <strong>Use Clear Language:</strong> Avoid jargon and write in a
+                way that's easy for students to understand.
+            </li>
+            <li>
+                <strong>Include All Details:</strong> Salary, location, and deadline
+                help students make informed decisions.
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

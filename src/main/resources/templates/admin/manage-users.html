@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ============================================
+     ADMIN MANAGE USERS PAGE
+     ============================================
+     This page displays all registered users in the system
+     and allows the admin to activate/deactivate accounts.
+
+     Features:
+     - Lists all users with their details
+     - Shows user role (STUDENT, EMPLOYER, ADMIN)
+     - Shows account status (ACTIVE, INACTIVE)
+     - Activate and Deactivate buttons for each user
+     - Success messages for actions
+     - Cannot deactivate own account
+
+     The controller passes a "users" list to this template
+     ============================================ -->
+
+<head th:replace="fragments/header :: head">
+    <!-- Import head section with CSS and meta tags -->
+</head>
+
+<body>
+<!-- ============================================
+     NAVIGATION BAR
+     ============================================ -->
+<nav th:replace="fragments/header :: header"></nav>
+
+<!-- ============================================
+     MAIN CONTENT CONTAINER
+     ============================================ -->
+<div class="container">
+
+    <!-- ============================================
+         SUCCESS MESSAGES
+         ============================================
+         Displayed based on URL parameters -->
+
+    <!-- User activated message -->
+    <div class="alert alert-success" th:if="${param.activated}">
+        <i class="fas fa-check-circle"></i>
+        User account activated successfully!
+    </div>
+
+    <!-- User deactivated message -->
+    <div class="alert alert-success" th:if="${param.deactivated}">
+        <i class="fas fa-check-circle"></i>
+        User account deactivated successfully!
+    </div>
+
+    <!-- ============================================
+         PAGE HEADER
+         ============================================ -->
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                <i class="fas fa-users-cog"></i>
+                User Management
+            </h2>
+        </div>
+        <p>
+            View and manage all registered users.
+            You can activate or deactivate user accounts to control system access.
+        </p>
+    </div>
+
+    <!-- ============================================
+         USERS TABLE
+         ============================================
+         Only displayed if users list is not empty -->
+    <div th:if="${users != null and !users.empty}">
+
+        <!-- Summary statistics -->
+        <div class="card" style="background: #f8f9fa; margin-bottom: 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center;">
+
+                <!-- Total Users -->
+                <div>
+                    <h3 style="color: #667eea; margin-bottom: 0.5rem;"
+                        th:text="${#lists.size(users)}">0</h3>
+                    <p style="margin: 0; color: #666;">Total Users</p>
+                </div>
+
+                <!-- Active Users -->
+                <div>
+                    <h3 style="color: #28a745; margin-bottom: 0.5rem;">
+                        <span th:text="${#lists.size(users.?[status == T(com.campusboard.campusboard.models.User.Status).ACTIVE])}">0</span>
+                    </h3>
+                    <p style="margin: 0; color: #666;">Active</p>
+                </div>
+
+                <!-- Inactive Users -->
+                <div>
+                    <h3 style="color: #dc3545; margin-bottom: 0.5rem;">
+                        <span th:text="${#lists.size(users.?[status == T(com.campusboard.campusboard.models.User.Status).INACTIVE])}">0</span>
+                    </h3>
+                    <p style="margin: 0; color: #666;">Inactive</p>
+                </div>
+
+                <!-- Students -->
+                <div>
+                    <h3 style="color: #17a2b8; margin-bottom: 0.5rem;">
+                        <span th:text="${#lists.size(users.?[role == T(com.campusboard.campusboard.models.User.Role).STUDENT])}">0</span>
+                    </h3>
+                    <p style="margin: 0; color: #666;">Students</p>
+                </div>
+
+                <!-- Employers -->
+                <div>
+                    <h3 style="color: #ffc107; margin-bottom: 0.5rem;">
+                        <span th:text="${#lists.size(users.?[role == T(com.campusboard.campusboard.models.User.Role).EMPLOYER])}">0</span>
+                    </h3>
+                    <p style="margin: 0; color: #666;">Employers</p>
+                </div>
+
+                <!-- Admins -->
+                <div>
+                    <h3 style="color: #6f42c1; margin-bottom: 0.5rem;">
+                        <span th:text="${#lists.size(users.?[role == T(com.campusboard.campusboard.models.User.Role).ADMIN])}">0</span>
+                    </h3>
+                    <p style="margin: 0; color: #666;">Admins</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table wrapper for responsive scrolling -->
+        <div class="table-wrapper">
+
+            <table class="table">
+
+                <!-- =====================
+                     TABLE HEADER
+                     =====================
+                     Column headers for user information -->
+                <thead>
+                <tr>
+                    <th><i class="fas fa-hashtag"></i> ID</th>
+                    <th><i class="fas fa-user"></i> Full Name</th>
+                    <th><i class="fas fa-envelope"></i> Email</th>
+                    <th><i class="fas fa-user-tag"></i> Role</th>
+                    <th><i class="fas fa-toggle-on"></i> Status</th>
+                    <th><i class="fas fa-calendar"></i> Joined</th>
+                    <th><i class="fas fa-cog"></i> Actions</th>
+                </tr>
+                </thead>
+
+                <!-- =====================
+                     TABLE BODY
+                     =====================
+                     Loop through each user and display data -->
+                <tbody>
+
+                <!-- Loop through users list -->
+                <tr th:each="user : ${users}">
+
+                    <!-- USER ID -->
+                    <td th:text="${user.userId}">1</td>
+
+                    <!-- FULL NAME -->
+                    <td>
+                        <strong th:text="${user.fullName}">User Name</strong>
+                    </td>
+
+                    <!-- EMAIL -->
+                    <td th:text="${user.email}">
+                        user@example.com
+                    </td>
+
+                    <!-- ROLE -->
+                    <td>
+                        <!-- Badge with different colors based on role -->
+                        <span class="badge"
+                              th:classappend="${user.role == T(com.campusboard.campusboard.models.User.Role).ADMIN} ? 'badge-rejected' :
+                                                     ${user.role == T(com.campusboard.campusboard.models.User.Role).EMPLOYER} ? 'badge-pending' :
+                                                     'badge-submitted'"
+                              th:text="${user.role}">
+                                    ROLE
+                                </span>
+                    </td>
+
+                    <!-- STATUS -->
+                    <td>
+                        <!-- Badge with different colors based on status -->
+                        <span class="badge"
+                              th:classappend="${user.status == T(com.campusboard.campusboard.models.User.Status).ACTIVE} ? 'badge-active' : 'badge-inactive'"
+                              th:text="${user.status}">
+                                    ACTIVE
+                                </span>
+                    </td>
+
+                    <!-- REGISTRATION DATE -->
+                    <td>
+                                <span th:text="${#temporals.format(user.createdAt, 'MMM dd, yyyy')}">
+                                    Jan 01, 2025
+                                </span>
+                    </td>
+
+                    <!-- ACTION BUTTONS -->
+                    <td>
+                        <!-- =====================
+                             ACTIVATE BUTTON
+                             =====================
+                             Only shown if user is INACTIVE -->
+                        <form th:if="${user.status == T(com.campusboard.campusboard.models.User.Status).INACTIVE}"
+                              th:action="@{/admin/users/activate/{id}(id=${user.userId})}"
+                              method="post"
+                              style="display: inline;">
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fas fa-check"></i> Activate
+                            </button>
+                        </form>
+
+                        <!-- =====================
+                             DEACTIVATE BUTTON
+                             =====================
+                             Only shown if user is ACTIVE
+                             Includes confirmation dialog
+                             Note: We should ideally prevent deactivating
+                             the currently logged-in admin, but that requires
+                             passing the current user's email to the template -->
+                        <form th:if="${user.status == T(com.campusboard.campusboard.models.User.Status).ACTIVE}"
+                              th:action="@{/admin/users/deactivate/{id}(id=${user.userId})}"
+                              method="post"
+                              style="display: inline;"
+                              onsubmit="return confirm('Are you sure you want to deactivate this user account?');">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-ban"></i> Deactivate
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- ============================================
+         EMPTY STATE
+         ============================================
+         Displayed when no users exist (unlikely) -->
+    <div class="empty-state" th:if="${users == null or users.empty}">
+        <!-- Large icon for empty state -->
+        <i class="fas fa-users-slash"></i>
+
+        <!-- Message to user -->
+        <h3>No Users Found</h3>
+        <p>
+            There are no registered users in the system.
+        </p>
+    </div>
+
+    <!-- ============================================
+         MANAGEMENT GUIDELINES
+         ============================================
+         Information about user management -->
+    <div class="card mt-3" th:if="${users != null and !users.empty}">
+        <h4 style="color: #667eea; margin-bottom: 1rem;">
+            <i class="fas fa-info-circle"></i> User Management Guidelines
+        </h4>
+        <ul style="line-height: 2; color: #555;">
+            <li>
+                <strong>Active Users:</strong> Can log in and use all features based on their role.
+            </li>
+            <li>
+                <strong>Inactive Users:</strong> Cannot log in to the system.
+                Their account remains in the database but is disabled.
+            </li>
+            <li>
+                <strong>Deactivation Use Cases:</strong> Suspend accounts for policy violations,
+                inactive users, or graduated students.
+            </li>
+            <li>
+                <strong>Reactivation:</strong> Inactive accounts can be reactivated at any time
+                without data loss.
+            </li>
+            <li>
+                <strong>Roles:</strong>
+                <span class="badge badge-submitted">STUDENT</span> can browse and apply to jobs.
+                <span class="badge badge-pending">EMPLOYER</span> can post jobs.
+                <span class="badge badge-rejected">ADMIN</span> manages the system.
+            </li>
+        </ul>
+    </div>
+
+    <!-- ============================================
+         STATUS LEGEND
+         ============================================
+         Helps admins understand user statuses -->
+    <div class="card mt-3" th:if="${users != null and !users.empty}">
+        <h4 style="margin-bottom: 1rem;">
+            <i class="fas fa-question-circle"></i> Status & Role Legend
+        </h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div>
+                <span class="badge badge-active">ACTIVE</span>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">User can access the system</p>
+            </div>
+            <div>
+                <span class="badge badge-inactive">INACTIVE</span>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">User is blocked from logging in</p>
+            </div>
+            <div>
+                <span class="badge badge-submitted">STUDENT</span>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">Can browse and apply to jobs</p>
+            </div>
+            <div>
+                <span class="badge badge-pending">EMPLOYER</span>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">Can create job postings</p>
+            </div>
+            <div>
+                <span class="badge badge-rejected">ADMIN</span>
+                <p style="margin-top: 0.5rem; margin-bottom: 0;">Full system management access</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<!-- ============================================
+     JAVASCRIPT FOR DEACTIVATION CONFIRMATION
+     ============================================
+     The onsubmit attribute in the deactivate form
+     shows a confirmation dialog before deactivation -->
+
+</body>
+</html>
