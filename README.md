@@ -91,6 +91,3 @@ The project uses Spring Security to enforce access rules.
 | ADMIN    | Approve/reject jobs, manage user accounts |
 
 Password hashing and route protection are fully implemented.
-
-git clone https://github.com/YOUR_USERNAME/campus-job-board.git
-cd campus-job-board
