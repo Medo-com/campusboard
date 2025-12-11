@@ -4,47 +4,26 @@
 <!-- ============================================
      STUDENT APPLICATIONS PAGE
      ============================================
-     This page displays all job applications submitted
-     by the currently logged-in student.
-
-     Features:
-     - Lists all applications with job details
-     - Shows application status (SUBMITTED, ACCEPTED, REJECTED)
-     - Displays when application was submitted
-     - Shows empty state if no applications
-     - Success message when redirected after applying
-
-     The controller passes "applications" list to this template
+     Displays all job applications submitted by the student.
+     Shows job info, status badges, and application dates.
      ============================================ -->
 
-<head th:replace="fragments/header :: head">
-    <!-- Import head section with CSS and meta tags -->
-</head>
+<head th:replace="fragments/header :: head"></head>
 
 <body>
-<!-- ============================================
-     NAVIGATION BAR
-     ============================================ -->
+
+<!-- NAVIGATION -->
 <nav th:replace="fragments/header :: header"></nav>
 
-<!-- ============================================
-     MAIN CONTENT CONTAINER
-     ============================================ -->
 <div class="container">
 
-    <!-- ============================================
-         SUCCESS MESSAGE
-         ============================================
-         Shown when redirected with ?success parameter
-         Example: after successfully applying to a job -->
+    <!-- SUCCESS MESSAGE -->
     <div class="alert alert-success" th:if="${param.success}">
         <i class="fas fa-check-circle"></i>
         Your application has been submitted successfully!
     </div>
 
-    <!-- ============================================
-         PAGE HEADER
-         ============================================ -->
+    <!-- PAGE HEADER -->
     <div class="card">
         <div class="card-header">
             <h2>
@@ -53,26 +32,16 @@
             </h2>
         </div>
         <p>
-            Track the status of all your job applications.
-            You can see which positions you've applied to and their current status.
+            Track the status of your job applications.
         </p>
     </div>
 
-    <!-- ============================================
-         APPLICATIONS TABLE
-         ============================================
-         Only displayed if applications list is not empty -->
+    <!-- APPLICATIONS TABLE -->
     <div th:if="${applications != null and !applications.empty}">
 
-        <!-- Table wrapper for responsive scrolling -->
         <div class="table-wrapper">
 
             <table class="table">
-
-                <!-- =====================
-                     TABLE HEADER
-                     =====================
-                     Column headers for the table -->
                 <thead>
                 <tr>
                     <th><i class="fas fa-hashtag"></i> #</th>
@@ -85,113 +54,88 @@
                 </tr>
                 </thead>
 
-                <!-- =====================
-                     TABLE BODY
-                     =====================
-                     Loop through each application and display data -->
                 <tbody>
-
-                <!-- Loop through applications list
-                     iterStat provides loop statistics (index, count, etc.) -->
                 <tr th:each="app, iterStat : ${applications}">
 
-                    <!-- APPLICATION NUMBER (1, 2, 3...) -->
+                    <!-- Count -->
                     <td th:text="${iterStat.count}">1</td>
 
-                    <!-- JOB TITLE -->
+                    <!-- Job Title -->
                     <td>
                         <strong th:text="${app.job.title}">Job Title</strong>
                     </td>
 
-                    <!-- EMPLOYER NAME -->
-                    <td th:text="${app.job.employer.fullName}">
-                        Employer Name
-                    </td>
+                    <!-- Employer -->
+                    <td th:text="${app.job.employer.fullName}">Employer</td>
 
-                    <!-- LOCATION -->
-                    <td th:text="${app.job.location != null ? app.job.location : 'N/A'}">
-                        Location
-                    </td>
+                    <!-- Location -->
+                    <td th:text="${app.job.location != null ? app.job.location : 'N/A'}">Location</td>
 
-                    <!-- SALARY -->
+                    <!-- Salary -->
                     <td>
-                        <!-- Check if salary exists, otherwise show N/A -->
                         <span th:if="${app.job.salary != null}">
-                                    $<span th:text="${#numbers.formatDecimal(app.job.salary, 0, 2)}">0.00</span>/hr
-                                </span>
+                            $<span th:text="${#numbers.formatDecimal(app.job.salary, 0, 2)}">0.00</span>/hr
+                        </span>
                         <span th:if="${app.job.salary == null}">N/A</span>
                     </td>
 
-                    <!-- APPLICATION STATUS -->
+                    <!-- STATUS BADGE (FIXED) -->
                     <td>
-                        <!-- Badge with different colors based on status
-                             Uses conditional class binding -->
                         <span class="badge"
-                              th:classappend="${app.status == T(com.campusboard.campusboard.models.JobApplication.Status).SUBMITTED} ? 'badge-submitted' :
-                                                     ${app.status == T(com.campusboard.campusboard.models.JobApplication.Status).ACCEPTED} ? 'badge-approved' :
-                                                     'badge-rejected'"
+                              th:classappend="${
+                                app.status == T(com.campusboard.campusboard.models.JobApplication.Status).SUBMITTED
+                                  ? 'badge-submitted'
+                                  : (app.status == T(com.campusboard.campusboard.models.JobApplication.Status).ACCEPTED
+                                      ? 'badge-approved'
+                                      : 'badge-rejected')
+                              }"
                               th:text="${app.status}">
-                                    SUBMITTED
-                                </span>
+                        </span>
                     </td>
 
-                    <!-- APPLICATION DATE -->
+                    <!-- DATE -->
                     <td>
-                        <!-- Format the date and time nicely -->
                         <span th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">
-                                    Jan 01, 2025
-                                </span>
+                            Jan 01, 2025
+                        </span>
                     </td>
-                </tr>
 
+                </tr>
                 </tbody>
             </table>
 
         </div>
 
-        <!-- =====================
-             LEGEND FOR STATUS BADGES
-             =====================
-             Helps users understand status colors -->
+        <!-- STATUS LEGEND -->
         <div class="card mt-3">
             <h4 style="margin-bottom: 1rem;">
                 <i class="fas fa-info-circle"></i> Status Legend
             </h4>
+
             <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
                 <div>
                     <span class="badge badge-submitted">SUBMITTED</span>
-                    <span style="margin-left: 0.5rem;">- Your application is under review</span>
+                    <span style="margin-left: 0.5rem;">- Under review</span>
                 </div>
                 <div>
                     <span class="badge badge-approved">ACCEPTED</span>
-                    <span style="margin-left: 0.5rem;">- Congratulations! You've been accepted</span>
+                    <span style="margin-left: 0.5rem;">- Congratulations!</span>
                 </div>
                 <div>
                     <span class="badge badge-rejected">REJECTED</span>
-                    <span style="margin-left: 0.5rem;">- Unfortunately not selected this time</span>
+                    <span style="margin-left: 0.5rem;">- Not selected</span>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- ============================================
-         EMPTY STATE
-         ============================================
-         Displayed when student has no applications
-         Uses th:if to check if list is empty or null -->
+    <!-- EMPTY STATE -->
     <div class="empty-state" th:if="${applications == null or applications.empty}">
-        <!-- Large icon for empty state -->
         <i class="fas fa-inbox"></i>
-
-        <!-- Message to user -->
         <h3>No Applications Yet</h3>
-        <p>
-            You haven't applied to any jobs yet.
-            Browse available positions and submit your applications!
-        </p>
+        <p>You haven't applied to any jobs yet.</p>
 
-        <!-- Call-to-action button -->
         <a th:href="@{/student/jobs}" class="btn btn-primary" style="margin-top: 1rem;">
             <i class="fas fa-search"></i> Browse Available Jobs
         </a>
@@ -199,9 +143,7 @@
 
 </div>
 
-<!-- ============================================
-     FOOTER
-     ============================================ -->
+<!-- FOOTER -->
 <footer th:replace="fragments/footer :: footer"></footer>
 
 </body>

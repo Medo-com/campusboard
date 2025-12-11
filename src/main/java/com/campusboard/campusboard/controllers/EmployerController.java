@@ -116,14 +116,17 @@ public class EmployerController {
     }
 
     // ===========================================
-    // VIEW APPLICANTS FOR A JOB
+    // VIEW APPLICANTS FOR A JOB  (FIXED)
     // ===========================================
     @GetMapping("/jobs/{jobId}/applicants")
     public String viewApplicants(@PathVariable Long jobId, Model model) {
 
+        Job job = jobService.getJobById(jobId);                     // ← ADDED
         List<JobApplication> applicants = applicationService.getApplicationsForJob(jobId);
 
+        model.addAttribute("job", job);                             // ← ADDED
         model.addAttribute("applications", applicants);
+
         return "employer/applicants";
     }
 }
