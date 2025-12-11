@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ============================================
+     FOOTER FRAGMENT
+     ============================================
+     This is a reusable footer component that appears
+     at the bottom of every page in the application.
+
+     It contains copyright information and can be
+     extended to include links to privacy policy,
+     terms of service, contact info, etc.
+
+     Uses Thymeleaf's fragment system to be included
+     in other pages via: th:replace="fragments/footer :: footer"
+     ============================================ -->
+
+<footer class="footer" th:fragment="footer">
+    <!-- ============================================
+         COPYRIGHT SECTION
+         ============================================
+         Displays copyright information with dynamic year -->
+    <div class="footer-content">
+        <p>
+            <!-- Icon for visual appeal -->
+            <i class="fas fa-copyright"></i>
+
+            <!-- Dynamic year using Thymeleaf's #dates utility -->
+            <span th:text="${#dates.year(#dates.createNow())}">2025</span>
+
+            <!-- Application name and tagline -->
+            Campus Job Board System. All rights reserved.
+        </p>
+
+        <!-- ============================================
+             ADDITIONAL INFO
+             ============================================
+             Subtitle with mission statement -->
+        <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+            Connecting Students with Campus Opportunities
+        </p>
+    </div>
+</footer>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- ============================================
+     LOGIN PAGE
+     ============================================
+     This is the public login page where all users
+     (students, employers, and admins) sign in.
+
+     Features:
+     - Username (email) and password fields
+     - Success messages (registration, logout)
+     - Error messages (invalid credentials)
+     - Link to registration page
+     - Clean, centered login form
+
+     Spring Security handles the actual authentication
+     based on the SecurityConfig settings.
+     ============================================ -->
+
+<head th:replace="fragments/header :: head">
+    <!-- Import head section with CSS and meta tags -->
+</head>
+
+<body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+
+<!-- ============================================
+     LOGIN CONTAINER
+     ============================================
+     Centered white card with login form -->
+<div style="width: 100%; max-width: 450px; padding: 0 1rem;">
+
+    <div class="card" style="box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+
+        <!-- =====================
+             HEADER WITH LOGO
+             ===================== -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <i class="fas fa-briefcase" style="font-size: 3rem; color: #667eea;"></i>
+            <h2 style="margin-top: 1rem; color: #333;">Campus Job Board</h2>
+            <p style="color: #666; margin-top: 0.5rem;">Sign in to your account</p>
+        </div>
+
+        <!-- ============================================
+             SUCCESS MESSAGES
+             ============================================
+             Displayed based on URL parameters -->
+
+        <!-- Registration success message -->
+        <div class="alert alert-success" th:if="${param.registered}">
+            <i class="fas fa-check-circle"></i>
+            Registration successful! Please log in with your credentials.
+        </div>
+
+        <!-- Logout success message -->
+        <div class="alert alert-info" th:if="${param.logout}">
+            <i class="fas fa-sign-out-alt"></i>
+            You have been successfully logged out.
+        </div>
+
+        <!-- ============================================
+             ERROR MESSAGE
+             ============================================
+             Shown when login credentials are invalid
+             Spring Security adds ?error parameter on failed login -->
+        <div class="alert alert-danger" th:if="${param.error}">
+            <i class="fas fa-exclamation-circle"></i>
+            Invalid email or password. Please try again.
+        </div>
+
+        <!-- ============================================
+             LOGIN FORM
+             ============================================
+             Form submits to /login (handled by Spring Security)
+             method="post" is required for Spring Security -->
+        <form th:action="@{/login}" method="post">
+
+            <!-- =====================
+                 EMAIL/USERNAME FIELD
+                 =====================
+                 Spring Security expects field name "username"
+                 even though we're using email addresses -->
+            <div class="form-group">
+                <label for="username">
+                    <i class="fas fa-envelope"></i> Email Address
+                </label>
+                <input type="email"
+                       id="username"
+                       name="username"
+                       class="form-control"
+                       placeholder="your.email@example.com"
+                       required
+                       autofocus>
+            </div>
+
+            <!-- =====================
+                 PASSWORD FIELD
+                 =====================
+                 Spring Security expects field name "password" -->
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i> Password
+                </label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       class="form-control"
+                       placeholder="Enter your password"
+                       required>
+            </div>
+
+            <!-- =====================
+                 SUBMIT BUTTON
+                 ===================== -->
+            <button type="submit" class="btn btn-primary w-100" style="padding: 1rem; font-size: 1.1rem;">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+
+        <!-- ============================================
+             DIVIDER
+             ============================================ -->
+        <div style="text-align: center; margin: 2rem 0; color: #999;">
+                <span style="background: white; padding: 0 1rem; position: relative; z-index: 1;">
+                    or
+                </span>
+            <div style="border-bottom: 1px solid #ddd; position: relative; top: -12px; z-index: 0;"></div>
+        </div>
+
+        <!-- ============================================
+             REGISTRATION LINK
+             ============================================
+             Link to registration page for new users -->
+        <div style="text-align: center;">
+            <p style="color: #666; margin-bottom: 1rem;">
+                Don't have an account?
+            </p>
+            <a th:href="@{/register}" class="btn btn-secondary w-100">
+                <i class="fas fa-user-plus"></i> Create New Account
+            </a>
+        </div>
+
+    </div>
+
+    <!-- ============================================
+         FOOTER INFO
+         ============================================ -->
+    <div style="text-align: center; margin-top: 2rem; color: white;">
+        <p>
+            <i class="fas fa-info-circle"></i>
+            Campus Job Board System - Connecting Students with Opportunities
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

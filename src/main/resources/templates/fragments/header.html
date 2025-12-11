@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- ============================================
+     HEADER FRAGMENT
+     ============================================
+     This is a reusable header component that appears
+     on every page of the application. It contains
+     the navigation bar with role-based menu items.
+
+     Uses Thymeleaf's fragment system to be included
+     in other pages via: th:replace="fragments/header :: header"
+     ============================================ -->
+
+<head th:fragment="head">
+    <!-- ============================================
+         META TAGS & CHARSET
+         ============================================
+         Essential meta information for the page -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ============================================
+         PAGE TITLE
+         ============================================
+         Dynamic title that can be overridden in each page -->
+    <title th:text="${pageTitle != null ? pageTitle + ' - Campus Job Board' : 'Campus Job Board'}">Campus Job Board</title>
+
+    <!-- ============================================
+         STYLESHEET LINKS
+         ============================================
+         Import our custom CSS file -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <!-- ============================================
+         FONT AWESOME ICONS
+         ============================================
+         CDN link for icons used throughout the site -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<!-- ============================================
+     NAVIGATION BAR FRAGMENT
+     ============================================
+     This fragment contains the main navigation bar
+     with role-specific menu items -->
+<nav class="navbar" th:fragment="header">
+    <div class="nav-container">
+        <!-- ============================================
+             BRAND/LOGO
+             ============================================
+             Clicking this takes user to their dashboard -->
+        <a href="/" class="nav-brand">
+            <i class="fas fa-briefcase"></i> Campus Job Board
+        </a>
+
+        <!-- ============================================
+             NAVIGATION LINKS
+             ============================================
+             Links are shown/hidden based on user's role
+             using Spring Security's sec:authorize attribute -->
+        <ul class="nav-links">
+            <!-- =====================
+                 STUDENT MENU ITEMS
+                 =====================
+                 Only visible to users with ROLE_STUDENT -->
+            <li sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/dashboard}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/jobs}">
+                    <i class="fas fa-search"></i> Browse Jobs
+                </a>
+            </li>
+            <li sec:authorize="hasRole('STUDENT')">
+                <a th:href="@{/student/applications}">
+                    <i class="fas fa-file-alt"></i> My Applications
+                </a>
+            </li>
+
+            <!-- =====================
+                 EMPLOYER MENU ITEMS
+                 =====================
+                 Only visible to users with ROLE_EMPLOYER -->
+            <li sec:authorize="hasRole('EMPLOYER')">
+                <a th:href="@{/employer/dashboard}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li sec:authorize="hasRole('EMPLOYER')">
+                <a th:href="@{/employer/jobs}">
+                    <i class="fas fa-briefcase"></i> My Jobs
+                </a>
+            </li>
+            <li sec:authorize="hasRole('EMPLOYER')">
+                <a th:href="@{/employer/jobs/create}">
+                    <i class="fas fa-plus"></i> Post Job
+                </a>
+            </li>
+
+            <!-- =====================
+                 ADMIN MENU ITEMS
+                 =====================
+                 Only visible to users with ROLE_ADMIN -->
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/dashboard}">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/jobs/pending}">
+                    <i class="fas fa-clock"></i> Pending Jobs
+                </a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/users}">
+                    <i class="fas fa-users"></i> Manage Users
+                </a>
+            </li>
+
+            <!-- =====================
+                 LOGOUT BUTTON
+                 =====================
+                 Visible to all authenticated users
+                 Uses a form to POST to /logout endpoint -->
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-secondary btn-sm"
+                            style="border: none; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+</html>
