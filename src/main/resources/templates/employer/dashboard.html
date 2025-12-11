@@ -4,36 +4,19 @@
 
 <!-- ============================================
      EMPLOYER DASHBOARD PAGE
-     ============================================
-     This is the main landing page for employers after login.
-     It provides quick access to all employer features:
-     - Manage job postings
-     - Create new job listings
-     - View applications from students
-
-     The dashboard uses a card-based grid layout for
-     easy navigation to different sections.
      ============================================ -->
 
-<head th:replace="fragments/header :: head">
-    <!-- Import head section with CSS and meta tags -->
-</head>
+<head th:replace="~{fragments/header :: head}"></head>
 
 <body>
+
 <!-- ============================================
      NAVIGATION BAR
      ============================================ -->
-<nav th:replace="fragments/header :: header"></nav>
+<nav th:replace="~{fragments/header :: header}"></nav>
 
-<!-- ============================================
-     MAIN CONTENT CONTAINER
-     ============================================ -->
 <div class="container">
 
-    <!-- ============================================
-         WELCOME HEADER
-         ============================================
-         Greets the logged-in employer by name -->
     <div class="card">
         <div class="card-header">
             <h2>
@@ -47,88 +30,47 @@
         </p>
     </div>
 
-    <!-- ============================================
-         DASHBOARD GRID
-         ============================================
-         Grid of cards showing different actions
-         available to the employer -->
     <div class="dashboard-grid">
 
-        <!-- =====================
-             MY JOBS CARD
-             =====================
-             View and manage existing job postings -->
         <div class="dashboard-card">
-            <!-- Icon representing job management -->
             <i class="fas fa-briefcase"></i>
-
-            <!-- Card title -->
             <h3>My Job Postings</h3>
-
-            <!-- Card description -->
             <p>
                 View, edit, and manage all your job postings.
                 Track their approval status and make updates as needed.
             </p>
-
-            <!-- Action button -->
             <a th:href="@{/employer/jobs}" class="btn btn-primary">
                 Manage Jobs
             </a>
         </div>
 
-        <!-- =====================
-             POST NEW JOB CARD
-             =====================
-             Create a new job posting -->
         <div class="dashboard-card">
-            <!-- Icon representing adding new content -->
             <i class="fas fa-plus-circle"></i>
-
-            <!-- Card title -->
             <h3>Post a New Job</h3>
-
-            <!-- Card description -->
             <p>
                 Create a new job opportunity for students.
                 Your posting will be reviewed by an admin before going live.
             </p>
-
-            <!-- Action button -->
             <a th:href="@{/employer/jobs/create}" class="btn btn-primary">
                 Create Job Posting
             </a>
         </div>
 
-        <!-- =====================
-             HELP & GUIDELINES CARD
-             =====================
-             Information about the posting process -->
         <div class="dashboard-card">
-            <!-- Icon representing help/information -->
             <i class="fas fa-info-circle"></i>
-
-            <!-- Card title -->
             <h3>Posting Guidelines</h3>
-
-            <!-- Card description -->
             <p>
                 Learn best practices for creating effective job postings
                 that attract qualified student candidates.
             </p>
-
-            <!-- Info text -->
             <p style="color: #667eea; font-weight: 600;">
                 <i class="fas fa-lightbulb"></i>
                 All postings require admin approval
             </p>
         </div>
+
     </div>
 
-    <!-- ============================================
-         QUICK GUIDE SECTION
-         ============================================
-         Helpful information for employers -->
     <div class="card mt-4">
         <div class="card-header">
             <h3><i class="fas fa-book"></i> Employer Quick Guide</h3>
@@ -157,17 +99,13 @@
         </ul>
     </div>
 
-    <!-- ============================================
-         JOB STATUS INFORMATION
-         ============================================
-         Explains different job statuses -->
     <div class="card mt-3">
         <div class="card-header">
             <h3><i class="fas fa-question-circle"></i> Understanding Job Status</h3>
         </div>
+
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
 
-            <!-- PENDING STATUS -->
             <div>
                 <span class="badge badge-pending">PENDING</span>
                 <p style="margin-top: 0.5rem; color: #555;">
@@ -175,7 +113,6 @@
                 </p>
             </div>
 
-            <!-- APPROVED STATUS -->
             <div>
                 <span class="badge badge-approved">APPROVED</span>
                 <p style="margin-top: 0.5rem; color: #555;">
@@ -183,22 +120,19 @@
                 </p>
             </div>
 
-            <!-- REJECTED STATUS -->
             <div>
                 <span class="badge badge-rejected">REJECTED</span>
                 <p style="margin-top: 0.5rem; color: #555;">
                     Your job was not approved. You can edit and resubmit it.
                 </p>
             </div>
+
         </div>
     </div>
 
 </div>
 
-<!-- ============================================
-     FOOTER
-     ============================================ -->
-<footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>

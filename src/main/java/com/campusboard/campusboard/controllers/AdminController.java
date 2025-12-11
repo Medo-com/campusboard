@@ -30,32 +30,17 @@ public class AdminController {
     }
 
     // ===========================================
-    // VIEW PENDING JOBS
+    // VIEW PENDING JOBS (FIXED)
     // ===========================================
     @GetMapping("/jobs/pending")
     public String viewPendingJobs(Model model) {
 
-        List<Job> pendingJobs = jobService.getApprovedJobs()
-                .stream()
-                .filter(job -> job.getStatus() == Job.Status.PENDING)
-                .toList();
-
-        model.addAttribute("jobs", pendingJobs);
-        return "admin/pending-jobs";
-    }
-
-    // -------------------------------------------
-    // *Alternate more accurate version*
-    // If you prefer, replace above section with:
-    /*
-    @GetMapping("/jobs/pending")
-    public String viewPendingJobs(Model model) {
+        // Correct: load ONLY jobs with PENDING status
         List<Job> pendingJobs = jobService.getJobsByStatus(Job.Status.PENDING);
+
         model.addAttribute("jobs", pendingJobs);
         return "admin/pending-jobs";
     }
-    */
-    // -------------------------------------------
 
     // ===========================================
     // APPROVE JOB

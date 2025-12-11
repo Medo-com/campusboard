@@ -2,213 +2,106 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<!-- ============================================
-     ADMIN DASHBOARD PAGE
-     ============================================
-     This is the main landing page for administrators after login.
-     It provides quick access to all admin features:
-     - Approve/reject job postings
-     - Manage user accounts
-     - View system overview
-
-     The dashboard uses a card-based grid layout for
-     easy navigation to different administrative sections.
-     ============================================ -->
-
-<head th:replace="fragments/header :: head">
-    <!-- Import head section with CSS and meta tags -->
-</head>
+<head th:replace="~{fragments/header :: head}"></head>
 
 <body>
-<!-- ============================================
-     NAVIGATION BAR
-     ============================================ -->
-<nav th:replace="fragments/header :: header"></nav>
 
-<!-- ============================================
-     MAIN CONTENT CONTAINER
-     ============================================ -->
+<nav th:replace="~{fragments/header :: header}"></nav>
+
 <div class="container">
 
-    <!-- ============================================
-         WELCOME HEADER
-         ============================================
-         Greets the logged-in administrator -->
     <div class="card">
         <div class="card-header">
-            <h2>
-                <i class="fas fa-user-shield"></i>
-                Admin Dashboard
-            </h2>
+            <h2><i class="fas fa-user-shield"></i> Admin Dashboard</h2>
         </div>
         <p>
             Welcome to the administrative control panel.
-            From here, you can manage job postings, user accounts, and oversee the entire Campus Job Board system.
+            From here, you can manage job postings, user accounts,
+            and oversee the entire Campus Job Board system.
         </p>
     </div>
 
-    <!-- ============================================
-         DASHBOARD GRID
-         ============================================
-         Grid of cards showing different admin functions -->
     <div class="dashboard-grid">
 
-        <!-- =====================
-             PENDING JOBS CARD
-             =====================
-             Review and approve/reject job postings -->
         <div class="dashboard-card">
-            <!-- Icon representing pending items -->
             <i class="fas fa-clock"></i>
-
-            <!-- Card title -->
             <h3>Pending Job Approvals</h3>
-
-            <!-- Card description -->
-            <p>
-                Review job postings submitted by employers.
-                Approve quality postings or reject those that don't meet standards.
-            </p>
-
-            <!-- Action button -->
-            <a th:href="@{/admin/jobs/pending}" class="btn btn-primary">
-                Review Pending Jobs
-            </a>
+            <p>Review job postings submitted by employers.</p>
+            <a th:href="@{/admin/jobs/pending}" class="btn btn-primary">Review Pending Jobs</a>
         </div>
 
-        <!-- =====================
-             USER MANAGEMENT CARD
-             =====================
-             Manage user accounts and permissions -->
         <div class="dashboard-card">
-            <!-- Icon representing users -->
             <i class="fas fa-users-cog"></i>
-
-            <!-- Card title -->
             <h3>User Management</h3>
-
-            <!-- Card description -->
-            <p>
-                View all registered users.
-                Activate or deactivate user accounts to control system access.
-            </p>
-
-            <!-- Action button -->
-            <a th:href="@{/admin/users}" class="btn btn-primary">
-                Manage Users
-            </a>
+            <p>View all registered users. Activate or deactivate accounts.</p>
+            <a th:href="@{/admin/users}" class="btn btn-primary">Manage Users</a>
         </div>
 
-        <!-- =====================
-             SYSTEM OVERVIEW CARD
-             =====================
-             General system information and stats -->
         <div class="dashboard-card">
-            <!-- Icon representing analytics -->
             <i class="fas fa-chart-line"></i>
-
-            <!-- Card title -->
             <h3>System Overview</h3>
-
-            <!-- Card description -->
-            <p>
-                Monitor system activity and statistics.
-                Keep track of users, jobs, and applications.
-            </p>
-
-            <!-- Info text instead of button -->
-            <p style="color: #667eea; font-weight: 600;">
-                <i class="fas fa-info-circle"></i>
-                Use the menu above to navigate
+            <p>Monitor system activity and statistics.</p>
+            <p style="color:#667eea; font-weight:600;">
+                <i class="fas fa-info-circle"></i> Use the menu above to navigate
             </p>
         </div>
+
     </div>
 
-    <!-- ============================================
-         ADMIN RESPONSIBILITIES
-         ============================================
-         Information about admin duties -->
     <div class="card mt-4">
         <div class="card-header">
             <h3><i class="fas fa-tasks"></i> Administrator Responsibilities</h3>
         </div>
-        <ul style="line-height: 2; color: #555;">
-            <li>
-                <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                <strong>Job Approval:</strong> Review all job postings for appropriateness,
-                accuracy, and compliance with campus policies.
-            </li>
-            <li>
-                <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                <strong>Quality Control:</strong> Ensure job descriptions are clear,
-                professional, and provide accurate information.
-            </li>
-            <li>
-                <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                <strong>User Oversight:</strong> Monitor user accounts and deactivate
-                accounts if necessary to maintain system integrity.
-            </li>
-            <li>
-                <i class="fas fa-check-circle" style="color: #28a745;"></i>
-                <strong>System Maintenance:</strong> Regularly check for pending approvals
-                and respond promptly to keep the system running smoothly.
-            </li>
+        <ul style="line-height: 2; color:#555;">
+            <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Job approval duties</li>
+            <li><i class="fas fa-check-circle" style="color:#28a745;"></i> Quality control</li>
+            <li><i class="fas fa-check-circle" style="color:#28a745;"></i> User oversight</li>
+            <li><i class="fas fa-check-circle" style="color:#28a745;"></i> System maintenance</li>
         </ul>
     </div>
 
-    <!-- ============================================
-         APPROVAL GUIDELINES
-         ============================================
-         Criteria for approving/rejecting jobs -->
     <div class="card mt-3">
         <div class="card-header">
             <h3><i class="fas fa-clipboard-check"></i> Job Approval Guidelines</h3>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:1rem;">
 
-            <!-- APPROVE CRITERIA -->
             <div>
-                <h4 style="color: #28a745; margin-bottom: 1rem;">
-                    <i class="fas fa-thumbs-up"></i> Approve If:
-                </h4>
-                <ul style="line-height: 2; color: #555;">
-                    <li>Job description is clear and detailed</li>
-                    <li>Position is appropriate for students</li>
-                    <li>Salary/wages are reasonable</li>
-                    <li>Contact information is provided</li>
-                    <li>Posting follows campus policies</li>
+                <h4 style="color:#28a745;"><i class="fas fa-thumbs-up"></i> Approve If:</h4>
+                <ul style="line-height:2;">
+                    <li>Clear description</li>
+                    <li>Student-appropriate</li>
+                    <li>Reasonable pay</li>
+                    <li>Valid contact info</li>
+                    <li>Follows policies</li>
                 </ul>
             </div>
 
-            <!-- REJECT CRITERIA -->
             <div>
-                <h4 style="color: #dc3545; margin-bottom: 1rem;">
-                    <i class="fas fa-thumbs-down"></i> Reject If:
-                </h4>
-                <ul style="line-height: 2; color: #555;">
-                    <li>Description is vague or incomplete</li>
-                    <li>Position seems inappropriate or unsafe</li>
-                    <li>Contains discriminatory language</li>
-                    <li>Appears to be spam or fraud</li>
-                    <li>Violates campus employment policies</li>
+                <h4 style="color:#dc3545;"><i class="fas fa-thumbs-down"></i> Reject If:</h4>
+                <ul style="line-height:2;">
+                    <li>Vague or incomplete</li>
+                    <li>Unsafe or inappropriate</li>
+                    <li>Discriminatory language</li>
+                    <li>Spam or fraud</li>
+                    <li>Policy violations</li>
                 </ul>
             </div>
+
         </div>
     </div>
 
-    <!-- ============================================
-         QUICK ACCESS SECTION
-         ============================================
-         Direct links to common admin tasks -->
     <div class="card mt-3">
         <div class="card-header">
             <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
         </div>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:1rem;">
             <a th:href="@{/admin/jobs/pending}" class="btn btn-warning">
                 <i class="fas fa-clock"></i> Check Pending Approvals
             </a>
+
             <a th:href="@{/admin/users}" class="btn btn-primary">
                 <i class="fas fa-users"></i> View All Users
             </a>
@@ -217,10 +110,7 @@
 
 </div>
 
-<!-- ============================================
-     FOOTER
-     ============================================ -->
-<footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>

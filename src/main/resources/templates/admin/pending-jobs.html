@@ -1,84 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<!-- ============================================
-     ADMIN PENDING JOBS PAGE
-     ============================================
-     This page displays all job postings with PENDING status
-     that require admin approval.
-
-     Features:
-     - Lists all pending job posts
-     - Shows full job details
-     - Approve and Reject buttons for each job
-     - Success messages for actions
-     - Empty state if no pending jobs
-
-     The controller passes a "jobs" list containing PENDING jobs
-     ============================================ -->
-
-<head th:replace="fragments/header :: head">
-    <!-- Import head section with CSS and meta tags -->
-</head>
+<head th:replace="~{fragments/header :: head}"></head>
 
 <body>
-<!-- ============================================
-     NAVIGATION BAR
-     ============================================ -->
-<nav th:replace="fragments/header :: header"></nav>
 
-<!-- ============================================
-     MAIN CONTENT CONTAINER
-     ============================================ -->
+<nav th:replace="~{fragments/header :: header}"></nav>
+
 <div class="container">
 
-    <!-- ============================================
-         SUCCESS MESSAGES
-         ============================================
-         Displayed based on URL parameters -->
-
-    <!-- Job approved message -->
     <div class="alert alert-success" th:if="${param.approved}">
         <i class="fas fa-check-circle"></i>
         Job posting approved successfully! It is now visible to students.
     </div>
 
-    <!-- Job rejected message -->
     <div class="alert alert-success" th:if="${param.rejected}">
         <i class="fas fa-check-circle"></i>
         Job posting rejected. The employer can edit and resubmit it.
     </div>
 
-    <!-- ============================================
-         PAGE HEADER
-         ============================================ -->
     <div class="card">
         <div class="card-header">
-            <h2>
-                <i class="fas fa-clock"></i>
-                Pending Job Approvals
-            </h2>
+            <h2><i class="fas fa-clock"></i> Pending Job Approvals</h2>
         </div>
         <p>
             Review job postings submitted by employers.
-            Approve quality postings to make them visible to students,
-            or reject those that don't meet standards.
+            Approve quality postings or reject those that don't meet standards.
         </p>
     </div>
 
-    <!-- ============================================
-         PENDING JOBS LIST
-         ============================================
-         Only displayed if there are pending jobs -->
     <div th:if="${jobs != null and !jobs.empty}">
 
-        <!-- =====================
-             LOOP THROUGH EACH JOB
-             =====================
-             Display each pending job in a detailed card -->
         <div class="card" th:each="job : ${jobs}" style="margin-bottom: 2rem;">
 
-            <!-- JOB HEADER - Title and Status -->
             <div class="d-flex justify-between align-center mb-3">
                 <h3 style="margin: 0;">
                     <i class="fas fa-briefcase"></i>
@@ -87,19 +41,14 @@
                 <span class="badge badge-pending">PENDING</span>
             </div>
 
-            <!-- =====================
-                 EMPLOYER INFORMATION
-                 ===================== -->
             <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
-                <h4 style="margin-bottom: 0.5rem;">
-                    <i class="fas fa-building"></i> Employer Information
-                </h4>
-                <p style="margin: 0;">
-                    <strong>Posted by:</strong>
+                <h4><i class="fas fa-building"></i> Employer Information</h4>
+
+                <p><strong>Posted by:</strong>
                     <span th:text="${job.employer.fullName}">Employer Name</span>
                 </p>
-                <p style="margin: 0;">
-                    <strong>Contact Email:</strong>
+
+                <p><strong>Contact Email:</strong>
                     <a th:href="'mailto:' + ${job.employer.email}"
                        th:text="${job.employer.email}"
                        style="color: #667eea;">
@@ -108,98 +57,57 @@
                 </p>
             </div>
 
-            <!-- =====================
-                 JOB DETAILS GRID
-                 ===================== -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
 
-                <!-- LOCATION -->
                 <div th:if="${job.location != null}">
-                    <h4 style="color: #667eea; margin-bottom: 0.5rem; font-size: 1rem;">
-                        <i class="fas fa-map-marker-alt"></i> Location
-                    </h4>
-                    <p style="margin: 0;" th:text="${job.location}">Location</p>
+                    <h4 style="color: #667eea;"><i class="fas fa-map-marker-alt"></i> Location</h4>
+                    <p th:text="${job.location}"></p>
                 </div>
 
-                <!-- SALARY -->
                 <div th:if="${job.salary != null}">
-                    <h4 style="color: #667eea; margin-bottom: 0.5rem; font-size: 1rem;">
-                        <i class="fas fa-dollar-sign"></i> Salary
-                    </h4>
-                    <p style="margin: 0;">
-                        $<span th:text="${#numbers.formatDecimal(job.salary, 0, 2)}">0.00</span> per hour
-                    </p>
+                    <h4 style="color: #667eea;"><i class="fas fa-dollar-sign"></i> Salary</h4>
+                    <p>$<span th:text="${#numbers.formatDecimal(job.salary, 0, 2)}"></span> per hour</p>
                 </div>
 
-                <!-- CATEGORY -->
                 <div th:if="${job.category != null}">
-                    <h4 style="color: #667eea; margin-bottom: 0.5rem; font-size: 1rem;">
-                        <i class="fas fa-tag"></i> Category
-                    </h4>
-                    <p style="margin: 0;" th:text="${job.category}">Category</p>
+                    <h4 style="color: #667eea;"><i class="fas fa-tag"></i> Category</h4>
+                    <p th:text="${job.category}"></p>
                 </div>
 
-                <!-- DEADLINE -->
                 <div th:if="${job.deadline != null}">
-                    <h4 style="color: #667eea; margin-bottom: 0.5rem; font-size: 1rem;">
-                        <i class="fas fa-calendar-alt"></i> Deadline
-                    </h4>
-                    <p style="margin: 0;" th:text="${job.deadline}">Deadline</p>
+                    <h4 style="color: #667eea;"><i class="fas fa-calendar-alt"></i> Deadline</h4>
+                    <p th:text="${job.deadline}"></p>
                 </div>
             </div>
 
-            <!-- =====================
-                 JOB DESCRIPTION
-                 =====================
-                 Full description for review -->
             <div style="margin-bottom: 1.5rem;">
-                <h4 style="color: #667eea; margin-bottom: 1rem;">
-                    <i class="fas fa-align-left"></i> Job Description
-                </h4>
+                <h4 style="color: #667eea;"><i class="fas fa-align-left"></i> Job Description</h4>
                 <div style="padding: 1rem; background: #f8f9fa; border-left: 4px solid #667eea; border-radius: 5px;">
-                    <p style="line-height: 1.8; color: #555; white-space: pre-line; margin: 0;"
-                       th:text="${job.description}">
-                        Job description will appear here with all details.
+                    <p style="white-space: pre-line;" th:text="${job.description}">
+                        Job description here.
                     </p>
                 </div>
             </div>
 
-            <!-- =====================
-                 POSTING TIMESTAMP
-                 ===================== -->
-            <div style="color: #999; font-size: 0.9rem; margin-bottom: 1.5rem;">
-                <i class="fas fa-clock"></i>
-                Submitted on:
-                <span th:text="${#temporals.format(job.createdAt, 'MMM dd, yyyy HH:mm')}">
-                        Date and Time
-                    </span>
+            <div style="color: #999; margin-bottom: 1.5rem;">
+                <i class="fas fa-clock"></i> Submitted on:
+                <span th:text="${#temporals.format(job.createdAt, 'MMM dd, yyyy HH:mm')}">Date</span>
             </div>
 
-            <!-- =====================
-                 APPROVAL ACTIONS
-                 =====================
-                 Approve and Reject buttons
-                 Each uses a separate form with POST method -->
             <div style="border-top: 2px solid #ddd; padding-top: 1.5rem;">
-                <h4 style="margin-bottom: 1rem;">
-                    <i class="fas fa-gavel"></i> Review Decision
-                </h4>
+                <h4><i class="fas fa-gavel"></i> Review Decision</h4>
 
                 <div class="d-flex gap-2">
-                    <!-- APPROVE BUTTON -->
+
                     <form th:action="@{/admin/jobs/approve/{id}(id=${job.jobId})}"
-                          method="post"
-                          style="display: inline;">
+                          method="post">
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-check"></i> Approve Job
                         </button>
                     </form>
 
-                    <!-- REJECT BUTTON -->
-                    <!-- Includes confirmation dialog -->
                     <form th:action="@{/admin/jobs/reject/{id}(id=${job.jobId})}"
                           method="post"
-                          style="display: inline;"
                           onsubmit="return confirm('Are you sure you want to reject this job posting?');">
                         <button type="submit" class="btn btn-danger">
                             <i class="fas fa-times"></i> Reject Job
@@ -207,73 +115,47 @@
                     </form>
                 </div>
 
-                <!-- Approval guidelines reminder -->
-                <div class="alert alert-info" style="margin-top: 1rem;">
+                <div class="alert alert-info" style="margin-top:1rem;">
                     <i class="fas fa-info-circle"></i>
-                    <strong>Remember:</strong> Approved jobs become immediately visible to students.
-                    Rejected jobs can be edited and resubmitted by the employer.
+                    Approved jobs become visible to students. Rejected jobs can be resubmitted.
                 </div>
             </div>
-        </div>
-        <!-- End of job loop -->
 
+        </div>
     </div>
 
-    <!-- ============================================
-         EMPTY STATE
-         ============================================
-         Displayed when no pending jobs exist -->
     <div class="empty-state" th:if="${jobs == null or jobs.empty}">
-        <!-- Large icon for empty state -->
         <i class="fas fa-check-double"></i>
-
-        <!-- Message to user -->
         <h3>No Pending Approvals</h3>
-        <p>
-            Great! All job postings have been reviewed.
-            Check back later when employers submit new positions.
-        </p>
+        <p>All job postings have been reviewed.</p>
 
-        <!-- Back to dashboard button -->
-        <a th:href="@{/admin/dashboard}" class="btn btn-primary" style="margin-top: 1rem;">
+        <a th:href="@{/admin/dashboard}" class="btn btn-primary">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
     </div>
 
-    <!-- ============================================
-         APPROVAL GUIDELINES REMINDER
-         ============================================
-         Quick reference for admins (only shown if jobs exist) -->
     <div class="card mt-3" th:if="${jobs != null and !jobs.empty}">
-        <h4 style="color: #667eea; margin-bottom: 1rem;">
+        <h4 style="color: #667eea;">
             <i class="fas fa-clipboard-list"></i> Quick Approval Checklist
         </h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
             <div>
-                <p style="margin: 0.5rem 0;">✓ Clear job title and description</p>
-                <p style="margin: 0.5rem 0;">✓ Appropriate for student workers</p>
-                <p style="margin: 0.5rem 0;">✓ Reasonable compensation</p>
+                <p>✓ Clear title & description</p>
+                <p>✓ Student-appropriate</p>
+                <p>✓ Reasonable compensation</p>
             </div>
             <div>
-                <p style="margin: 0.5rem 0;">✓ Valid employer contact info</p>
-                <p style="margin: 0.5rem 0;">✓ Follows campus policies</p>
-                <p style="margin: 0.5rem 0;">✓ No discriminatory language</p>
+                <p>✓ Valid contact info</p>
+                <p>✓ Policy compliant</p>
+                <p>✓ No discriminatory language</p>
             </div>
         </div>
     </div>
 
 </div>
 
-<!-- ============================================
-     FOOTER
-     ============================================ -->
-<footer th:replace="fragments/footer :: footer"></footer>
-
-<!-- ============================================
-     JAVASCRIPT FOR REJECTION CONFIRMATION
-     ============================================
-     The onsubmit attribute in the reject form
-     shows a confirmation dialog before rejection -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>

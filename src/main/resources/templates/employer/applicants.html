@@ -1,265 +1,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<!-- ============================================
-     EMPLOYER VIEW APPLICANTS PAGE
-     ============================================
-     This page displays all student applications
-     for a specific job posting.
-
-     Features:
-     - Lists all applications for a job
-     - Shows student information
-     - Displays application status
-     - Shows when each student applied
-     - Empty state if no applications
-
-     The controller passes "applications" list to this template
-     Each application contains: student info, job info, status, date
-     ============================================ -->
-
-<head th:replace="fragments/header :: head">
-    <!-- Import head section with CSS and meta tags -->
-</head>
+<head th:replace="~{fragments/header :: head}"></head>
 
 <body>
-<!-- ============================================
-     NAVIGATION BAR
-     ============================================ -->
-<nav th:replace="fragments/header :: header"></nav>
 
-<!-- ============================================
-     MAIN CONTENT CONTAINER
-     ============================================ -->
+<nav th:replace="~{fragments/header :: header}"></nav>
+
 <div class="container">
 
-    <!-- ============================================
-         PAGE HEADER
-         ============================================
-         Shows job title if applications exist -->
+    <!-- PAGE HEADER -->
     <div class="card">
         <div class="card-header">
             <h2>
                 <i class="fas fa-users"></i>
-                Applicants
-                <!-- Show job title if we have applications -->
-                <span th:if="${applications != null and !applications.empty}">
-                        for "<span th:text="${applications[0].job.title}">Job Title</span>"
-                    </span>
+                Applicants for:
+                <span th:text="${job != null ? job.title : 'Unknown Job'}">Job Title</span>
             </h2>
         </div>
         <p>
-            Review all students who have applied to this position.
-            You can see their contact information and application status.
+            Below is the list of all students who have applied to this position.
         </p>
     </div>
 
-    <!-- ============================================
-         APPLICATIONS TABLE
-         ============================================
-         Only displayed if applications list is not empty -->
+    <!-- APPLICANTS TABLE -->
     <div th:if="${applications != null and !applications.empty}">
-
-        <!-- Job Information Card -->
-        <div class="card" style="background: #f8f9fa; margin-bottom: 2rem;">
-            <h3 style="color: #667eea; margin-bottom: 1rem;">
-                <i class="fas fa-briefcase"></i> Job Details
-            </h3>
-
-            <!-- Access job details from first application -->
-            <div th:with="job=${applications[0].job}">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-
-                    <!-- Job Title -->
-                    <div>
-                        <strong>Position:</strong>
-                        <p th:text="${job.title}">Job Title</p>
-                    </div>
-
-                    <!-- Location -->
-                    <div th:if="${job.location != null}">
-                        <strong>Location:</strong>
-                        <p th:text="${job.location}">Location</p>
-                    </div>
-
-                    <!-- Salary -->
-                    <div th:if="${job.salary != null}">
-                        <strong>Salary:</strong>
-                        <p>
-                            $<span th:text="${#numbers.formatDecimal(job.salary, 0, 2)}">0.00</span>/hour
-                        </p>
-                    </div>
-
-                    <!-- Total Applications -->
-                    <div>
-                        <strong>Total Applications:</strong>
-                        <p th:text="${#lists.size(applications)}">0</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Table wrapper for responsive scrolling -->
         <div class="table-wrapper">
 
             <table class="table">
 
-                <!-- =====================
-                     TABLE HEADER
-                     =====================
-                     Column headers for applicant information -->
                 <thead>
                 <tr>
-                    <th><i class="fas fa-hashtag"></i> #</th>
-                    <th><i class="fas fa-user"></i> Student Name</th>
-                    <th><i class="fas fa-envelope"></i> Email</th>
-                    <th><i class="fas fa-calendar"></i> Applied On</th>
-                    <th><i class="fas fa-info-circle"></i> Status</th>
+                    <th>#</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Applied On</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
 
-                <!-- =====================
-                     TABLE BODY
-                     =====================
-                     Loop through each application -->
                 <tbody>
 
-                <!-- Loop through applications list
-                     iterStat provides index/count for numbering -->
                 <tr th:each="app, iterStat : ${applications}">
-
-                    <!-- APPLICATION NUMBER -->
                     <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${app.student.fullName}">Student Name</td>
+                    <td th:text="${app.student.email}">email</td>
 
-                    <!-- STUDENT NAME -->
                     <td>
-                        <strong th:text="${app.student.fullName}">
-                            Student Name
-                        </strong>
+                        <span th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">Date</span>
                     </td>
 
-                    <!-- STUDENT EMAIL -->
                     <td>
-                        <!-- Make email clickable with mailto link -->
-                        <a th:href="'mailto:' + ${app.student.email}"
-                           th:text="${app.student.email}"
-                           style="color: #667eea;">
-                            student@example.com
-                        </a>
-                    </td>
-
-                    <!-- APPLICATION DATE -->
-                    <td>
-                                <span th:text="${#temporals.format(app.appliedAt, 'MMM dd, yyyy')}">
-                                    Jan 01, 2025
-                                </span>
-                        <br>
-                        <small style="color: #999;">
-                                    <span th:text="${#temporals.format(app.appliedAt, 'HH:mm')}">
-                                        12:00
-                                    </span>
-                        </small>
-                    </td>
-
-                    <!-- APPLICATION STATUS -->
-                    <td>
-                        <!-- Badge with different colors based on status -->
                         <span class="badge"
-                              th:classappend="${app.status == T(com.campusboard.campusboard.models.JobApplication.Status).SUBMITTED} ? 'badge-submitted' :
-                                                     ${app.status == T(com.campusboard.campusboard.models.JobApplication.Status).ACCEPTED} ? 'badge-approved' :
-                                                     'badge-rejected'"
+                              th:classappend="${app.status.name() == 'SUBMITTED' ? 'badge-submitted' :
+                                              (app.status.name() == 'ACCEPTED' ? 'badge-approved' : 'badge-rejected')}"
                               th:text="${app.status}">
-                                    SUBMITTED
-                                </span>
+                        </span>
                     </td>
                 </tr>
 
                 </tbody>
+
             </table>
-
         </div>
-
-        <!-- =====================
-             APPLICANT STATISTICS
-             =====================
-             Show breakdown of application statuses -->
-        <div class="card mt-3">
-            <h4 style="margin-bottom: 1rem;">
-                <i class="fas fa-chart-pie"></i> Application Statistics
-            </h4>
-
-            <!-- Calculate statistics using Thymeleaf -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-
-                <!-- Total Applications -->
-                <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 5px;">
-                    <h3 style="color: #667eea; margin-bottom: 0.5rem;"
-                        th:text="${#lists.size(applications)}">0</h3>
-                    <p style="margin: 0;">Total Applications</p>
-                </div>
-
-                <!-- Submitted Count -->
-                <div style="text-align: center; padding: 1rem; background: #d1ecf1; border-radius: 5px;">
-                    <h3 style="color: #17a2b8; margin-bottom: 0.5rem;">
-                        <span th:text="${#lists.size(applications.?[status == T(com.campusboard.campusboard.models.JobApplication.Status).SUBMITTED])}">0</span>
-                    </h3>
-                    <p style="margin: 0;">Pending Review</p>
-                </div>
-
-                <!-- Accepted Count -->
-                <div style="text-align: center; padding: 1rem; background: #d4edda; border-radius: 5px;">
-                    <h3 style="color: #28a745; margin-bottom: 0.5rem;">
-                        <span th:text="${#lists.size(applications.?[status == T(com.campusboard.campusboard.models.JobApplication.Status).ACCEPTED])}">0</span>
-                    </h3>
-                    <p style="margin: 0;">Accepted</p>
-                </div>
-
-                <!-- Rejected Count -->
-                <div style="text-align: center; padding: 1rem; background: #f8d7da; border-radius: 5px;">
-                    <h3 style="color: #dc3545; margin-bottom: 0.5rem;">
-                        <span th:text="${#lists.size(applications.?[status == T(com.campusboard.campusboard.models.JobApplication.Status).REJECTED])}">0</span>
-                    </h3>
-                    <p style="margin: 0;">Rejected</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Back to Jobs Button -->
-        <div class="mt-3">
-            <a th:href="@{/employer/jobs}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to My Jobs
-            </a>
-        </div>
-
     </div>
 
-    <!-- ============================================
-         EMPTY STATE
-         ============================================
-         Displayed when no applications exist for this job -->
+    <!-- EMPTY STATE -->
     <div class="empty-state" th:if="${applications == null or applications.empty}">
-        <!-- Large icon for empty state -->
         <i class="fas fa-inbox"></i>
+        <h3>No Applicants Yet</h3>
+        <p>Nobody has applied to this job yet.</p>
 
-        <!-- Message to user -->
-        <h3>No Applications Yet</h3>
-        <p>
-            No students have applied to this position yet.
-            Check back later as applications come in!
-        </p>
-
-        <!-- Back button -->
-        <a th:href="@{/employer/jobs}" class="btn btn-secondary" style="margin-top: 1rem;">
+        <a th:href="@{/employer/jobs}" class="btn btn-primary">
             <i class="fas fa-arrow-left"></i> Back to My Jobs
         </a>
     </div>
 
 </div>
 
-<!-- ============================================
-     FOOTER
-     ============================================ -->
-<footer th:replace="fragments/footer :: footer"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>
